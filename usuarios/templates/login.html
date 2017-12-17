@@ -1,0 +1,17 @@
+{% extends 'template_usuario.html' %}
+{% block corpo %}
+<form class="form-signin" action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    {% if form.errors %}
+       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{form.non_field_errors}}
+    {% endif %}
+    <h2 class="form-signin-heading">Login</h2>
+    <input class="form-control" type="text" id="username" name="username" placeholder="Login" required>
+    <input class="form-control" type="password" id="password" name="password" placeholder="Senha" required>
+    <hr/>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Confirmar</button>
+    <a class="btn btn-lg btn-primary btn-block" href="{% url 'registrar' %}">Registro</a>
+</form>
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'template.html' %}
+{% block conteudo %}
+    <div class="col-lg-12">
+        {% if permissao_negada %}
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+               {{permissao_negada}}
+        {% endif %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h1>Bem-vindo ao Universo Python Online</h1>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <img class="img-rounded" style="width:100px; height:100px" src="img/{{perfil_logado.foto}}">
+                <p>{{perfil_logado.nome}}</p>
+
+            </div>
+            <form action="{% url 'comentario' %}" method="post">
+                {% csrf_token %}
+                <textarea type="text" name="areaTexto" id="areaTexto" value="{{form.areaTexto.value}}" placeholder="No que você está pensando?"></textarea><br/>
+                <button class="btn btn-primary" type="submit">Comentar</button>
+            </form>
+        </div>
+         <div class="panel panel-default">
+            {% with total_notificacoes=notificacoes.count %}
+
+            {% if total_notificacoes > 0 %}
+                <div class="panel-heading">
+                    <p><b>Notificações</b></p>
+                </div>
+                <ul class="list-group">
+                    {% for notificacao in notificacoes.all %}
+                    <li class="list-group-item"> <img class="img-rounded" style="width:20px; height:20px" src="img/{{notificacao.perfil.foto}}"> {{notificacao.perfil.nome}} - {{notificacao.areaTexto}}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="list-group-item">Sem Notificações</p>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="panel panel-default">
+            {% with total_convites=perfil_logado.convites_recebidos.count %}
+
+            {% if total_convites > 0 %}
+                <div class="panel-heading">
+                    <p>Você tem {{total_convites}} convite{{total_convites |pluralize}}</p>
+                </div>
+                <ul class="list-group">
+                    {% for convite in perfil_logado.convites_recebidos %}
+                    <li class="list-group-item">{{convite.solicitante.nome}} <a href="{% url 'aceitar' convite.id %}" class="btn btn-primary">:)</a> <a href="{% url 'recusar' convite.id %}" class="btn btn-danger">:(</a>  </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="list-group-item">Sem convites</p>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div class="panel panel-default">
+            {% with total_contatos=perfil_logado.contatos.count %}
+
+            {% if total_contatos > 0 %}
+                <div class="panel-heading">
+                    <p>Você tem {{total_contatos}} contato{{total_contatos |pluralize}}</p>
+                </div>
+                <ul class="list-group">
+                    {% for contato in perfil_logado.contatos.all %}
+                    <li class="list-group-item"><a href="{% url 'perfis' contato.id %}"> <img class="img-rounded" style="width:20px; height:20px" src="img/{{contato.foto}}"> {{contato.nome}}</a></li>
+                         {% for notificacao in contato.notificacao.all %}
+                            <li class="list-group-item">>{{notificacao.areaTexto}}</li>
+
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="list-group-item">Sem contatos</p>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

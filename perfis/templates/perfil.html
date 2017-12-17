@@ -1,0 +1,35 @@
+{% extends "template.html" %}
+{% block conteudo %}
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <img class="img-rounded" style="width:200px; height:200px" src="../img/{{perfil.foto}}">
+                <h1>{{perfil.nome | upper}}</h1>
+                {% if perfil.id == perfil_logado.id %}
+                    <a class="btn btn-primary" href="{% url 'editar_perfil' %}">Editar</a>
+                {% elif perfil.id != perfil_logado.id  and perfil in perfil_logado.contatos.all %}
+                    <a class="btn btn-danger" href="{% url 'excluir_contato' perfil.id %}">Excluir</a>
+                {% endif %}
+            </div>
+                <p class="row-content">Nascimento:{{perfil.nascimento}}</p>
+                <p class="row-content">Telefone:{{perfil.telefone}}</p>
+                <p class="row-content">Empresa:{{perfil.empresa | upper}}</p>
+                {% if perfil not in perfil_logado.contatos.all and perfil not in perfil_logado.convidados and perfil_logado.id != perfil.id%}
+                    <a class="btn btn-primary" href="{% url 'convidar' perfil.id %}">Convidar</a>
+                {% endif%}
+                <br/>
+                <br/>
+                <h2>Convites efetuados</h2>
+                {% if perfil.convidados %}
+                <ul>
+                    {% for convidado in perfil.convidados %}
+                    <li>{{convidado.nome}}</li>
+                    {%endfor%}
+                </ul>
+                {% else %}
+                <p>Nenhum convite efetuado</p>
+                {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

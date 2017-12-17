@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectedin</title>
+    <link type="text/css" href="{% static 'styles/bootstrap.css' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'styles/main.css' %}" rel="stylesheet">
+     <link type="text/css" href="{% static 'styles/formulario.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div class="conteiner">
+        <div class="header">
+            <ul class="nav nav-pills pull-right">
+                <li class=""><a href="{% url 'perfis' perfil_logado.id %}">{{perfil_logado.nome}}</a></li>
+                <li class=""><a href="{% url 'logout' %}">LOGOUT</a> </li>
+            </ul>
+            <h3 class="text-muted"><a href="{% url 'index' %}">CONNECTEDIN</a></h3>
+            <form action="{% url 'pesquisar' %}" method="get">
+                <input type="text" name="texto" id="texto" value="{{form.texto.value}}">
+                <button class="btn btn-primary" type="submit">Pesquisar</button>
+            </form>
+        </div>
+        <div class="row content">
+            {% block conteudo %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+</body>
+</html>
